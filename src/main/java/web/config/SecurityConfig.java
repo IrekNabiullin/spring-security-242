@@ -23,6 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication().withUser("ADMIN").password("ADMIN").roles("ADMIN");
+        auth.inMemoryAuthentication().withUser("USER").password("USER").roles("USER");
 //        auth.jdbcAuthentication()
 //                .dataSource(dataSource)
 //                .passwordEncoder(NoOpPasswordEncoder.getInstance())
@@ -70,7 +71,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //страницы аутентификаци доступна всем
                 .antMatchers("/login").anonymous()
                 // защищенные URL
-                .antMatchers("/users").access("hasAnyRole('ADMIN')").anyRequest().authenticated();
+                .antMatchers("/users").access("hasRole('ADMIN')").anyRequest().authenticated();
+    //            .antMatchers("/users/edit").access("hasAnyRole('ADMIN')").anyRequest().authenticated();
+//                .antMatchers("/admin/**").access("hasRole('ADMIN')").anyRequest().authenticated();
+//                .antMatchers("/**").authenticated();
+//                .antMatchers("/admin/**").hasRole("ADMIN")
+//                .antMatchers("/profile")
+//                    .access("hasAnyRole('ADMIN', 'USER')")
+//                    .anyRequest().authenticated();
     }
 
     @Bean

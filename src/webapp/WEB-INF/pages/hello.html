@@ -9,21 +9,21 @@
 </head>
 <body>
 <div>
-    <h2 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h2>
+    <h2 th:align="center" inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h2>
 </div>
 
 
-<form th:action="@{/profile}" method="get">
+<form th:align="center" th:action="@{/profile}" method="get">
     <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
     <input type="submit" value="Profile"/>
 </form>
 <br>
-<form th:action="@{/users}" method="get">
+<form th:align="center" th:action="@{/users}" method="get">
     <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
     <input type="submit" value="Users"/>
 </form>
 <br>
-<form th:action="@{/logout}" method="post">
+<form th:align="center" th:action="@{/logout}" method="post">
     <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
     <input type="submit" value="Sign Out"/>
 </form>

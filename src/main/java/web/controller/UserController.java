@@ -40,7 +40,7 @@ public class UserController {
         modelMap.addAttribute("users", user);
         return "profile";
     }
-    @GetMapping(value = "/admin")
+    @GetMapping(value = "/users")
     public String getUsers(@RequestParam(name = "locale", defaultValue = "en", required = false) String locale, ModelMap modelMap) {
         modelMap.addAttribute("users", userService.listUsers());
         ResourceBundle bundle = ResourceBundle.getBundle("language_" + locale);
@@ -48,7 +48,7 @@ public class UserController {
         return "users";
     }
 
-    @GetMapping(value = "/admin/edit")
+    @GetMapping(value = "/users/edit")
     public String editPage(@RequestParam(value = "id") String id, ModelMap modelMap) {
         Long userId = Long.parseLong(id);
         User user = userService.getUserById(userId);
@@ -56,7 +56,7 @@ public class UserController {
         return "editPage";
     }
 
-    @PostMapping(value = "/admin/edit")
+    @PostMapping(value = "/users/edit")
     public String editUser(@RequestParam(value = "id") String id,
                            @RequestParam(value = "name") String name,
                            @RequestParam(value = "last_name") String last_name,
@@ -85,12 +85,12 @@ public class UserController {
         return "users";
     }
 
-    @GetMapping(value = "/admin/add")
+    @GetMapping(value = "/users/add")
     public String addForm() {
         return "addPage";
     }
 
-    @PostMapping(value = "/admin/add", produces = "text/html; charset=utf-8")
+    @PostMapping(value = "/users/add", produces = "text/html; charset=utf-8")
     public String addNewUser(@RequestParam(value = "name") String name,
                              @RequestParam(value = "last_name") String last_name,
                              @RequestParam(value = "email") String email,
@@ -102,7 +102,7 @@ public class UserController {
         return "addPage";
     }
 
-    @GetMapping("/admin/delete")
+    @GetMapping("/users/delete")
     public String deleteUser(@RequestParam(value = "id") String id, ModelMap modelMap,
                              @RequestParam(name = "locale", defaultValue = "en", required = false) String locale) {
         System.out.println("Delete user with id = " + id);
