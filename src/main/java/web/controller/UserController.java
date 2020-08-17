@@ -3,22 +3,44 @@ package web.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import web.model.User;
 import web.service.UserService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 @Controller
 
+@RequestMapping("/")
 public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = "/")
+    @RequestMapping(value = "login", method = RequestMethod.GET)
+    public String loginPage() {
+        return "login";
+    }
+
+    @RequestMapping(value = "hello", method = RequestMethod.GET)
+    public String printWelcome(ModelMap modelMap) {
+        List<String> messages = new ArrayList<>();
+        messages.add("Hello!");
+        messages.add("This is security test application.");
+        modelMap.addAttribute("messages", messages);
+        modelMap.addAttribute("users", userService.listUsers());
+        return "hello";
+    }
+
+    @GetMapping(value = "/profile")
+    public String getProfile(@RequestParam(value = "id", required = true) String id, ModelMap modelMap) {
+        Long userId = Long.parseLong(id);
+        User user = userService.getUserById(userId);
+        modelMap.addAttribute("users", user);
+        return "profile";
+    }
+    @GetMapping(value = "/admin")
     public String getUsers(@RequestParam(name = "locale", defaultValue = "en", required = false) String locale, ModelMap modelMap) {
         modelMap.addAttribute("users", userService.listUsers());
         ResourceBundle bundle = ResourceBundle.getBundle("language_" + locale);
@@ -26,7 +48,7 @@ public class UserController {
         return "users";
     }
 
-    @GetMapping(value = "/edit")
+    @GetMapping(value = "/admin/edit")
     public String editPage(@RequestParam(value = "id") String id, ModelMap modelMap) {
         Long userId = Long.parseLong(id);
         User user = userService.getUserById(userId);
@@ -34,7 +56,7 @@ public class UserController {
         return "editPage";
     }
 
-    @PostMapping(value = "/edit")
+    @PostMapping(value = "/admin/edit")
     public String editUser(@RequestParam(value = "id") String id,
                            @RequestParam(value = "name") String name,
                            @RequestParam(value = "last_name") String last_name,
@@ -63,12 +85,12 @@ public class UserController {
         return "users";
     }
 
-    @GetMapping(value = "/add")
+    @GetMapping(value = "/admin/add")
     public String addForm() {
         return "addPage";
     }
 
-    @PostMapping(value = "/add", produces = "text/html; charset=utf-8")
+    @PostMapping(value = "/admin/add", produces = "text/html; charset=utf-8")
     public String addNewUser(@RequestParam(value = "name") String name,
                              @RequestParam(value = "last_name") String last_name,
                              @RequestParam(value = "email") String email,
@@ -80,7 +102,7 @@ public class UserController {
         return "addPage";
     }
 
-    @GetMapping("/delete")
+    @GetMapping("/admin/delete")
     public String deleteUser(@RequestParam(value = "id") String id, ModelMap modelMap,
                              @RequestParam(name = "locale", defaultValue = "en", required = false) String locale) {
         System.out.println("Delete user with id = " + id);
@@ -92,4 +114,5 @@ public class UserController {
         modelMap.addAttribute("users", userService.listUsers());
         return "users";
     }
+
 }

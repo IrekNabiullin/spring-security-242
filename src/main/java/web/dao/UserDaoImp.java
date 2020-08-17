@@ -36,6 +36,12 @@ public class UserDaoImp implements UserDao {
 
     @Transactional
     @Override
+    public User getUserByName(String username) {
+        return entityManager.find(User.class, username);
+    }
+
+    @Transactional
+    @Override
     public void addUser(User user) {
         if (user.getId() == null) {
             logger.info("Inserting new user");

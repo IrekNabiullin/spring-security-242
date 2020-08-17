@@ -32,6 +32,12 @@ public class UserServiceImp implements UserService {
         return userDao.getUserById(id);
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public User getUserByName(String username) {
+        return userDao.getUserByName(username);
+    }
+
     @Transactional
     @Override
     public void updateUser(User user) {
