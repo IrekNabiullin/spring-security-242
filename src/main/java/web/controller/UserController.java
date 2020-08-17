@@ -1,6 +1,7 @@
 package web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -25,19 +26,19 @@ public class UserController {
 
     @RequestMapping(value = "hello", method = RequestMethod.GET)
     public String printWelcome(ModelMap modelMap) {
-        List<String> messages = new ArrayList<>();
-        messages.add("Hello!");
-        messages.add("This is security test application.");
-        modelMap.addAttribute("messages", messages);
-        modelMap.addAttribute("users", userService.listUsers());
+//        List<String> messages = new ArrayList<>();
+//        messages.add("Hello!");
+//        messages.add("This is security test application.");
+//        modelMap.addAttribute("messages", messages);
+//        modelMap.addAttribute("users", userService.listUsers());
         return "hello";
     }
 
     @GetMapping(value = "/profile")
-    public String getProfile(@RequestParam(value = "id", required = true) String id, ModelMap modelMap) {
-        Long userId = Long.parseLong(id);
-        User user = userService.getUserById(userId);
-        modelMap.addAttribute("users", user);
+    public String getProfile(Authentication authentication, ModelMap modelMap) {
+        System.out.println("Go to profile. User name: " + authentication.getName());
+        User user = userService.getUserByName(authentication.getName());
+        modelMap.addAttribute("user", user);
         return "profile";
     }
     @GetMapping(value = "/users")

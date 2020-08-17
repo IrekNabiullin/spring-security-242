@@ -37,7 +37,13 @@ public class UserDaoImp implements UserDao {
     @Transactional
     @Override
     public User getUserByName(String username) {
-        return entityManager.find(User.class, username);
+ //       return entityManager.createQuery("select u from User u where u.login = 'username'", User.class).getSingleResult();
+        String hql = "select u from User u where u.login = '" + username +"'";
+        TypedQuery<User> query = entityManager.createQuery(hql, User.class);
+        User user = query.getSingleResult();
+        System.out.println("Got user. User name:" + user.getLogin());
+        return user;
+
     }
 
     @Transactional

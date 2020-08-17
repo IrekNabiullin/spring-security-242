@@ -1,10 +1,46 @@
 <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Profile</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
 </head>
-<body>
+
+<div class="container col-md-5">
+    <div class="card">
+        <div class="card-body">
+<!--            <form action="/profile" method="get">-->
+                <caption>
+                    <h2 th:align="center">
+                        User info
+                    </h2>
+                </caption>
+                <p>
+                <h5 th:align="center" inline="text">User Name: [[${user.getFirstName()}]]</h5>
+                </p>
+                <p>
+                <h5 th:align="left" inline="text">Last Name: [[${user.getLastName()}]]</h5>
+                </p>
+                <p>
+                <h5 th:align="left" inline="text">E-mail: [[${user.getEmail()}]]</h5>
+                </p>
+                <p>
+                <h5 th:align="left" inline="text">Login:  [[${user.getLogin()}]]</h5>
+                </p>
+                <p>
+                <h5 th:align="left" inline="password">Password: [[${user.getPassword()}]]</h5>
+                </p>
+                <p>
+                    <button onclick="location.href='/hello'">Back to main</button>
+                    <button onclick="location.href='/logout'">Logout</button>
+                </p>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

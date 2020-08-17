@@ -63,7 +63,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // указываем URL при удачном логауте
                 .logoutSuccessUrl("/login?logout")
                 //выклчаем кроссдоменную секьюрность (на этапе обучения неважна)
-                .and().csrf().disable();
+                .and()
+                .csrf().disable();
 
         http
                 // делаем страницу регистрации недоступной для авторизированных пользователей
@@ -71,14 +72,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //страницы аутентификаци доступна всем
                 .antMatchers("/login").anonymous()
                 // защищенные URL
-                .antMatchers("/users").access("hasRole('ADMIN')").anyRequest().authenticated();
-    //            .antMatchers("/users/edit").access("hasAnyRole('ADMIN')").anyRequest().authenticated();
+ //               .antMatchers("/users/**").hasAuthority("ADMIN")
+//                .antMatchers("/admin**").hasAuthority("ADMIN")
+ //               .antMatchers("/profile").hasAnyAuthority("USER", "ADMIN");
+ //               .antMatchers("/users").access("hasRole('ADMIN')").anyRequest().authenticated()
+  //              .antMatchers("/users").hasRole("ADMIN");
+ //               .antMatchers("/users/edit").access("hasAnyRole('ADMIN')").anyRequest().authenticated();
 //                .antMatchers("/admin/**").access("hasRole('ADMIN')").anyRequest().authenticated();
 //                .antMatchers("/**").authenticated();
 //                .antMatchers("/admin/**").hasRole("ADMIN")
-//                .antMatchers("/profile")
-//                    .access("hasAnyRole('ADMIN', 'USER')")
-//                    .anyRequest().authenticated();
+                .antMatchers("/profile")
+                    .access("hasAnyRole('ADMIN', 'USER')")
+                    .anyRequest().authenticated();
     }
 
     @Bean
