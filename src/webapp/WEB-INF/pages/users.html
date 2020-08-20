@@ -29,6 +29,7 @@
         <th> Password </th>
         <th> Edit </th>
         <th> Delete </th>
+        <th> User Roles </th>
     </tr>
     </thead>
     <tbody>
@@ -45,6 +46,9 @@
         <td>
             <a th:href="@{/users/delete(id=${user.id})} ">Delete</a>
         </td>
+
+<!--            <td th:each="user : ${list.roles}" var="role">${role.toString()}<br/></td>-->
+
     </tr>
     </tbody>
 </table>
@@ -53,7 +57,7 @@
     <button onclick="location.href='/users/add'" >Add new user</button>
 </p>
 <p th:align="center">
-    <button onclick="location.href='/hello'" >Back to main</button>
+    <button onclick="location.href='/admin'" >Back to main</button>
     <button onclick="location.href='/logout'">Logout</button>
 </p>
 

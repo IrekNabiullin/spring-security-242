@@ -3,7 +3,7 @@ package web.model;
 import org.springframework.security.core.GrantedAuthority;
 
 public enum Role implements GrantedAuthority {
-    ROLE_ADMIN, ROLE_USER;
+    ADMIN, USER;
 
     @Override
     public String getAuthority() {
@@ -12,6 +12,10 @@ public enum Role implements GrantedAuthority {
 
     @Override
     public String toString() {
+        return name();
+    }
+
+    public String getRole() {
         return name();
     }
 }

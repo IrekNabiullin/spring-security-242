@@ -6,11 +6,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import web.model.User;
+import web.model.Role;
 import web.service.UserService;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.security.Principal;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 @Controller
 
@@ -24,28 +25,45 @@ public class UserController {
         return "login";
     }
 
-    @RequestMapping(value = "hello", method = RequestMethod.GET)
+    @RequestMapping(value = "admin", method = RequestMethod.GET)
     public String printWelcome(ModelMap modelMap) {
 //        List<String> messages = new ArrayList<>();
 //        messages.add("Hello!");
 //        messages.add("This is security test application.");
 //        modelMap.addAttribute("messages", messages);
 //        modelMap.addAttribute("users", userService.listUsers());
-        return "hello";
+        return "admin";
     }
 
     @GetMapping(value = "/profile")
-    public String getProfile(Authentication authentication, ModelMap modelMap) {
+    public String getProfile(Authentication authentication, ModelMap modelMap, Principal principal) {
         System.out.println("Go to profile. User name: " + authentication.getName());
+        System.out.println("Go to profile. Authorities: " + authentication.getAuthorities());
+        System.out.println("Go to profile. Principal name:" + principal);
+        System.out.println(principal.toString());
         User user = userService.getUserByName(authentication.getName());
         modelMap.addAttribute("user", user);
+        modelMap.addAttribute("principal", principal);
         return "profile";
     }
     @GetMapping(value = "/users")
-    public String getUsers(@RequestParam(name = "locale", defaultValue = "en", required = false) String locale, ModelMap modelMap) {
+    public String getUsers(@RequestParam(name = "locale", defaultValue = "en", required = false) String locale, ModelMap modelMap,
+                           @ModelAttribute("user") User user, Authentication authentication) {
         modelMap.addAttribute("users", userService.listUsers());
         ResourceBundle bundle = ResourceBundle.getBundle("language_" + locale);
         modelMap.addAttribute("usersHeadline", bundle.getString("usersHeadline"));
+        //вытаскиваем роли юзеров
+//
+//        Set<Role> roles = user.getRoles();
+//        String RoleUser = request.getParameter("role1");
+//        String RoleAdmin = request.getParameter("role2");
+//        if (RoleUser != null) {
+//            roles.add(Role.USER);
+//        }
+//        if (RoleAdmin != null) {
+//            roles.add(Role.ADMIN);
+//        }
+//        user.setRoles(roles);
         return "users";
     }
 
@@ -114,6 +132,12 @@ public class UserController {
         System.out.println("headline = " + bundle.getString("usersHeadline"));
         modelMap.addAttribute("users", userService.listUsers());
         return "users";
+    }
+
+    @GetMapping(value = "/logout")
+    public String logOut(Authentication authentication, ModelMap modelMap) {
+
+        return "logout";
     }
 
 }
