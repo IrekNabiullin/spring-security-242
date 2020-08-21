@@ -27,12 +27,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "admin", method = RequestMethod.GET)
-    public String printWelcome(ModelMap modelMap) {
-//        List<String> messages = new ArrayList<>();
-//        messages.add("Hello!");
-//        messages.add("This is security test application.");
-//        modelMap.addAttribute("messages", messages);
-//        modelMap.addAttribute("users", userService.listUsers());
+    public String printWelcome() {
         return "admin";
     }
 
@@ -53,19 +48,6 @@ public class UserController {
         modelMap.addAttribute("users", userService.listUsers());
         ResourceBundle bundle = ResourceBundle.getBundle("language_" + locale);
         modelMap.addAttribute("usersHeadline", bundle.getString("usersHeadline"));
-
-        //вытаскиваем роли юзеров
-//        Set<Role> roles = user.getRoles();
-//        Set<Role> roles = user.getRoles();
-//        String RoleUser = request.getParameter("role1");
-//        String RoleAdmin = request.getParameter("role2");
-//        if (RoleUser != null) {
-//            roles.add(Role.USER);
-//        }
-//        if (RoleAdmin != null) {
-//            roles.add(Role.ADMIN);
-//        }
-//        user.setRoles(roles);
         return "users";
     }
 
@@ -139,7 +121,6 @@ public class UserController {
 
     @GetMapping(value = "/logout")
     public String logOut(Authentication authentication, ModelMap modelMap) {
-
         return "logout";
     }
 

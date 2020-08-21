@@ -44,53 +44,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService);
+        //********** вариант in-memory authentication********
 //        auth.inMemoryAuthentication().withUser("ADMIN").password("ADMIN").roles("ADMIN", "USER");
 //        auth.inMemoryAuthentication().withUser("USER").password("USER").roles("USER");
 
+        //********** вариант jdbc authentication ********
 //        auth.jdbcAuthentication()
 //                .dataSource(dataSource)
 //                .passwordEncoder(NoOpPasswordEncoder.getInstance())
 //                .usersByUsernameQuery("select username, password, active from users where username=?")
 //                .authoritiesByUsernameQuery("select u.username, ur.roles from users u inner join user_role ur on u.id = ur.user_id where u.username=?");
 
-//        @Service
-//        public class MyUserDetailsService implements UserDetailsService {
-//
-//            private Map<String, User> roles = new HashMap<>();
-//
-//            @PostConstruct
-//            public void init() {
-//                roles.put("admin2", new User("admin", "{noop}admin1", getAuthority("ROLE_ADMIN")));
-//                roles.put("user2", new User("user", "{noop}user1", getAuthority("ROLE_USER")));
-//            }
-//
-//            @Override
-//            public UserDetails loadUserByUsername(String username) {
-//                return roles.get(username);
-//            }
-//
-//            private List<GrantedAuthority> getAuthority(String role) {
-//                return Collections.singletonList(new SimpleGrantedAuthority(role));
-//            }
     }
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.authorizeRequests()
-//                .antMatchers("/**").authenticated()
-//                .antMatchers("/admin/**").hasRole("ROLE_ADMIN")
-//                .antMatchers("/profile/**").hasAnyRole("ROLE_ADMIN", "ROLE_USER")
-//                .and()
-//                .httpBasic()
-//                .and()
-//                .logout().logoutSuccessUrl("/");
 
         http.formLogin()
                 // указываем страницу с формой логина
                 .loginPage("/login")
                 //указываем логику обработки при логине
-//                .successHandler(new LoginSuccessHandler())
                 .successHandler(loginSuccessHandler)
                 // указываем action с формы логина
                 .loginProcessingUrl("/login")
@@ -137,6 +110,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return NoOpPasswordEncoder.getInstance();
     }
 
+    //********** вариант для зашифрованного пароля ********
 //    @Bean
 //    public PasswordEncoder passwordEncoder() {
 //        return new BCryptPasswordEncoder();
@@ -146,7 +120,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setPasswordEncoder(passwordEncoder());
-//        authenticationProvider.setUserDetailsService(userService);
         authenticationProvider.setUserDetailsService(userDetailsService);
         return authenticationProvider;
     }
