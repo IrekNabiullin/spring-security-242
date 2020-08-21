@@ -9,6 +9,7 @@ import web.model.User;
 import web.model.Role;
 import web.service.UserService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -36,7 +37,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/profile")
-    public String getProfile(Authentication authentication, ModelMap modelMap, Principal principal) {
+    public String getProfile(Authentication authentication, Principal principal, ModelMap modelMap) {
         System.out.println("Go to profile. User name: " + authentication.getName());
         System.out.println("Go to profile. Authorities: " + authentication.getAuthorities());
         System.out.println("Go to profile. Principal name:" + principal);
@@ -48,12 +49,13 @@ public class UserController {
     }
     @GetMapping(value = "/users")
     public String getUsers(@RequestParam(name = "locale", defaultValue = "en", required = false) String locale, ModelMap modelMap,
-                           @ModelAttribute("user") User user, Authentication authentication) {
+                           @ModelAttribute("user") User user, Authentication authentication, HttpServletRequest request) {
         modelMap.addAttribute("users", userService.listUsers());
         ResourceBundle bundle = ResourceBundle.getBundle("language_" + locale);
         modelMap.addAttribute("usersHeadline", bundle.getString("usersHeadline"));
+
         //вытаскиваем роли юзеров
-//
+//        Set<Role> roles = user.getRoles();
 //        Set<Role> roles = user.getRoles();
 //        String RoleUser = request.getParameter("role1");
 //        String RoleAdmin = request.getParameter("role2");
@@ -66,6 +68,7 @@ public class UserController {
 //        user.setRoles(roles);
         return "users";
     }
+
 
     @GetMapping(value = "/users/edit")
     public String editPage(@RequestParam(value = "id") String id, ModelMap modelMap) {

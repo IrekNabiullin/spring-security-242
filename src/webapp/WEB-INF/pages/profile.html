@@ -20,10 +20,13 @@
             <h5 th:align="center">Password: [[${user.getPassword()}]]</h5>
 
             <p th:align="center">
-                <button sec:authorize-acl="hasRole('ADMIN')" onclick="location.href='/admin'">Back to admin menu</button>
-                <button sec:authorize="hasRole('ROLE_ADMIN')" onclick="location.href='/admin'">Back to admin menu</button>
-                <button onclick="location.href='/logout'">Logout</button>
+                <a sec:authorize="hasRole('ADMIN')" th:align="center" th:href="@{/admin} ">For admins</a>
             </p>
+
+            <form th:align="center" th:action="@{/logout}" method="post">
+                <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
+                <input type="submit" value="Sign Out"/>
+            </form>
         </div>
     </div>
 </div>

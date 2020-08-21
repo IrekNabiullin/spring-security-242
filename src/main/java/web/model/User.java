@@ -1,12 +1,11 @@
 package web.model;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -33,10 +32,21 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "user_name"))
-    @Enumerated(EnumType.STRING)
-    private Set<Role> roles = new HashSet<>();
+//    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+//    @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "user_name"))
+//    @CollectionTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"))
+ //   @CollectionTable(name = "users_roles", joinColumns = @JoinColumn(name = "role_id"))
+//    @Enumerated(EnumType.STRING)
+//    private Set<Role> roles = new HashSet<>();
+
+
+
+    @ManyToMany
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Collection<Roles> roles;
+
 
     public User() {
     }
@@ -143,17 +153,32 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles();
+        List<GrantedAuthority> authorities;
+//                new ArrayList<GrantedAuthority>();
+
+        authorities = new ArrayList<GrantedAuthority>(roles.size());
+
+        for (Roles role : roles)
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
+//        return getRoles();
+        return authorities;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
+//    public void setRoles(<Role> roles) {
+//        this.roles = roles;
+//    }
+//
+//    public Set<Roles> getRoles() {
+//        return (Set<Roles>) roles;
+//    }
 
-    public Set<Role> getRoles() {
+//    public void setRoles(<Roles> roles) {
+//        this.roles = roles;
+//    }
+
+    public Collection<Roles> getRoles() {
         return roles;
     }
-
 
 
     @Override

@@ -3,6 +3,7 @@ package web.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,6 +18,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Service;
 import web.config.handler.LoginSuccessHandler;
 import web.model.User;
+import web.service.UserDetailsServiceImpl;
+import web.service.UserService;
 
 import javax.sql.DataSource;
 import java.util.Collections;
@@ -28,16 +31,21 @@ import java.util.Map;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    //    @Autowired
-//    private DataSource dataSource;
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    public void setUserService(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @Autowired
     LoginSuccessHandler loginSuccessHandler;
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("ADMIN").password("ADMIN").roles("ADMIN");
-        auth.inMemoryAuthentication().withUser("USER").password("USER").roles("USER");
+//        auth.inMemoryAuthentication().withUser("ADMIN").password("ADMIN").roles("ADMIN", "USER");
+//        auth.inMemoryAuthentication().withUser("USER").password("USER").roles("USER");
+
 //        auth.jdbcAuthentication()
 //                .dataSource(dataSource)
 //                .passwordEncoder(NoOpPasswordEncoder.getInstance())
@@ -100,7 +108,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 // указываем URL при удачном логауте
                 .logoutSuccessUrl("/login?logout")
-                //выклчаем кроссдоменную секьюрность (на этапе обучения неважна)
+                //выключаем кроссдоменную секьюрность (на этапе обучения неважна)
                 .and()
                 .csrf().disable();
 
@@ -110,17 +118,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //страницы аутентификаци доступна всем
                 .antMatchers("/login").anonymous()
                 // защищенные URL
-                //               .antMatchers("/users/**").hasAuthority("ADMIN")
-//                .antMatchers("/admin**").hasAuthority("ADMIN")
-                //               .antMatchers("/profile").hasAnyAuthority("USER", "ADMIN");
-                //               .antMatchers("/users").access("hasRole('ADMIN')").anyRequest().authenticated()
-                //              .antMatchers("/users").hasRole("ADMIN");
-                //               .antMatchers("/users/edit").access("hasAnyRole('ADMIN')").anyRequest().authenticated();
-//                .antMatchers("/admin/**").access("hasRole('ADMIN')").anyRequest().authenticated();
-//                .antMatchers("/**").authenticated();
-//                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/profile")
-                .access("hasAnyRole('ADMIN', 'USER')")
+                .antMatchers("/profile").authenticated()
+                .antMatchers("/admin**").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/users**").hasAuthority("ROLE_ADMIN")
+
+
+//                .antMatchers("/profile").access("hasAnyRole('ADMIN', 'USER')")
+                .antMatchers("/admin**")
+                .access("hasRole('ADMIN')")
+                .antMatchers("/users/**")
+                .access("hasRole('ADMIN')")
                 .anyRequest().authenticated();
     }
 
@@ -128,4 +135,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
+
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
+
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
+//        authenticationProvider.setUserDetailsService(userService);
+        authenticationProvider.setUserDetailsService(userDetailsService);
+        return authenticationProvider;
+    }
 }
+
+

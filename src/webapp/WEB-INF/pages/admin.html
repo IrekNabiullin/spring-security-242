@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Welcome</title>
+    <title>Admin</title>
 
 </head>
 <body>
@@ -15,7 +15,7 @@
 
 <form th:align="center" th:action="@{/profile}" method="get">
     <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
-    <input type="submit" value="Profile"/>
+    <input type="submit" value="My profile"/>
 </form>
 <br>
 <form th:align="center" th:action="@{/users}" method="get">
