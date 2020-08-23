@@ -16,9 +16,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest,
                                         HttpServletResponse httpServletResponse,
-                                        Authentication authentication) throws IOException, ServletException {
-//        httpServletResponse.sendRedirect("/users");
-//        httpServletResponse.sendRedirect("/admin");
+                                        Authentication authentication) throws IOException {
         //set our response to OK status
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);
 
@@ -28,7 +26,6 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
             System.out.println("Authorities:" + auth);
             if ("ROLE_ADMIN".equals(auth.getAuthority())){
                 admin = true;
-//                System.out.println("admin authority =" + admin);
             }
         }
 
