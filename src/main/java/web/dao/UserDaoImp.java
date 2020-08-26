@@ -20,6 +20,7 @@ public class UserDaoImp implements UserDao {
 
     @PersistenceContext
     EntityManager entityManager;
+
     @Transactional
     @Override
     public List<User> listUsers() {
@@ -30,7 +31,7 @@ public class UserDaoImp implements UserDao {
 
     @Transactional
     @Override
-    public User getUserById(Long id){
+    public User getUserById(Long id) {
         return entityManager.find(User.class, id);
     }
 
@@ -39,41 +40,42 @@ public class UserDaoImp implements UserDao {
     public User getUserByName(String username) {
         TypedQuery<User> query = entityManager.createQuery(
                 "SELECT u FROM User u WHERE u.login = :username", User.class);
-        User user = query.setParameter("username", username)
-                .getSingleResult();
-        System.out.println("Got user. User name:" + user.getLogin());
-        return user;
+        User user = null;
+        try {
+            User userTemp = query.setParameter("username", username)
+                    .getSingleResult();
+            System.out.println("Got user. User name:" + userTemp.getLogin());
+            if(userTemp != null) {
+                return userTemp;
+            } else {
+                return null;
+            }
+        } catch (javax.persistence.NoResultException ex) {
+            System.out.println("No user with name " + username + " found");
+            return null;
         }
-
-//        return entityManager.createQuery("select u from User u where u.firstName = 'username'", User.class).getSingleResult();
-
-//        String hql = "select u from User u where u.login = '" + username +"'";
-//        TypedQuery<User> query = entityManager.createQuery(hql, User.class);
-//        User user = query.getSingleResult();
-
-//        System.out.println("Got user. User name:" + user.getLogin());
-//        return user;
-
-//    }
+    }
 
     @Transactional
     @Override
     public void addUser(User user) {
-        if (user.getId() == null) {
-            logger.info("Inserting new user");
+
+        if (getUserByName(user.getLogin())!=null) {
+            System.out.println("User with login " + user.getLogin() + "exists");
+        } else if (user.getId() == null) {
             entityManager.persist(user);
         } else {
             entityManager.merge(user);
-            logger.info("Updating existing user");
+            System.out.println("Updating existing user");
         }
-        logger.info("User saved with id: " + user.getId());
+        System.out.println("User saved with id: " + user.getId());
     }
 
     @Transactional
     @Override
     public void updateUser(User user) {
         entityManager.merge(user);
-        logger.info("Updating existing user");
+        System.out.println("Updating existing user");
     }
 
     @Transactional

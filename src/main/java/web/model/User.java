@@ -10,7 +10,6 @@ import java.util.*;
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
-//    public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +31,7 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
+//    ***** Вариант для списка ролей в ENUM*******
 //    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
 //    @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "user_name"))
 //    @CollectionTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"))
@@ -40,37 +40,32 @@ public class User implements UserDetails {
 //    private Set<Role> roles = new HashSet<>();
 
 
-
-    @ManyToMany
+    @ManyToMany (cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Roles> roles;
 
-
     public User() {
     }
 
-    public User(String firstName, String lastName, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-    }
-
-    public User(String firstName, String lastName, String email, String login, String password) {
+    public User(String firstName, String lastName, String email, String login, String password, Collection<Roles> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.login = login;
         this.password = password;
+        this.roles = roles;
     }
 
-    public User(Long id, String firstName, String lastName, String email, String login, String password) {
+    public User(Long id, String firstName, String lastName, String email, String login, String password,Collection<Roles> roles) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.login = login;
         this.password = password;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -154,27 +149,17 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities;
-//                new ArrayList<GrantedAuthority>();
-
-        authorities = new ArrayList<GrantedAuthority>(roles.size());
+        authorities = new ArrayList<>(roles.size());
 
         for (Roles role : roles)
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
-//        return getRoles();
+
         return authorities;
     }
 
-//    public void setRoles(<Role> roles) {
-//        this.roles = roles;
-//    }
-//
-//    public Set<Roles> getRoles() {
-//        return (Set<Roles>) roles;
-//    }
-
-//    public void setRoles(<Roles> roles) {
-//        this.roles = roles;
-//    }
+    public void setRoles(Collection<Roles> roles) {
+        this.roles = roles;
+    }
 
     public Collection<Roles> getRoles() {
         return roles;

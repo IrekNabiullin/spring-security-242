@@ -28,21 +28,21 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         this.userDao = userDao;
     }
 
-         @Override
-         public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-             User user = userDao.getUserByName(username);
-             if(user == null) {
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userDao.getUserByName(username);
+        if (user == null) {
             throw new UsernameNotFoundException(String.format("User '%s' not found", username));
         }
-             System.out.println("Login in process.User.login: " + user.getLogin());
-             System.out.println("Login in process.User password: " + user.getPassword());
-             System.out.println("Login in process.User login: " + user.getLogin());
-             System.out.println("Login in process.User roles: " + mapRolesToAuthorities(user.getRoles()));
+        System.out.println("Login in process.User.login: " + user.getLogin());
+        System.out.println("Login in process.User password: " + user.getPassword());
+        System.out.println("Login in process.User login: " + user.getLogin());
+        System.out.println("Login in process.User roles: " + mapRolesToAuthorities(user.getRoles()));
         return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(),
                 mapRolesToAuthorities(user.getRoles()));
-         }
+    }
 
-        private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Roles> roles) {
+    public Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Roles> roles) {
         return roles.stream().map(r -> new SimpleGrantedAuthority(r.getRole())).collect(Collectors.toList());
     }
 }

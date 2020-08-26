@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.springframework.org/security/tags" version="2.0">
-<html lang="en">
+      xmlns:sec="http://www.springframework.org/security/tags" version="2.0"
+      lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Edit Form</title>
@@ -10,65 +10,130 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
 </head>
+<body>
 
 <div class="container col-md-5">
     <sec:authorize access="isAuthenticated()">
-    <div class="card">
-        <div class="card-body">
-            <form action="/users/edit" method="post">
-                <caption>
-                    <h2>
-                        Edit User
-                    </h2>
-                </caption>
+        <div class="card">
+            <div class="card-body">
+                <form action="/users/edit" method="post">
+                    <caption>
+                        <h2>
+                            Edit User
+                        </h2>
+                    </caption>
+                    <!--                    <input type="hidden" name="_csrf" value="{{_csrf.token}}">-->
+                    <input type="hidden" name="id" th:value='${user.getId()}'/>
 
-                <input type="hidden" name="id" th:value='${users.getId()}'/>
-
-                <fieldset class="form-group">
-                    <label>User Name</label> <input type="text"
-                                                    class="form-control"
-                                                    th:value='${users.getFirstName()}'
-                                                    name="name" required="required"/>
-                </fieldset>
-
-                <fieldset class="form-group">
-                    <label>User Last Name</label> <input type="text"
-                                                         class="form-control"
-                                                         th:value='${users.getLastName()}'
-                                                         name="last_name" required="required"/>
-                </fieldset>
-
-                <fieldset class="form-group">
-                    <label>User Email</label> <input type="text"
-                                                     class="form-control"
-                                                     th:value='${users.getEmail()}'
-                                                     name="email" required="required">
-                </fieldset>
-
-                <fieldset class="form-group">
-                    <label>User Login</label> <input type="text"
-                                                     class="form-control"
-                                                     th:value='${users.getLogin()}'
-                                                     name="login" required="required">
-                </fieldset>
-
-                <fieldset class="form-group">
-                    <label>User Password</label> <input type="text"
+                    <fieldset class="form-group">
+                        <label>User Name</label> <input type="text"
                                                         class="form-control"
-                                                        th:value='${users.getPassword()}'
-                                                        name="password" required="required">
-                </fieldset>
-                <p>
-                    <button type="reset">Очистить форму</button>
-                    <button type="submit">Отправить форму</button>
-                    <button class="button" onclick="location.href='/'">Вернуться к списку</button>
-                </p>
+                                                        th:value='${user.getFirstName()}'
+                                                        name="name" required="required"/>
+                    </fieldset>
 
-            </form>
+                    <fieldset class="form-group">
+                        <label>User Last Name</label> <input type="text"
+                                                             class="form-control"
+                                                             th:value='${user.getLastName()}'
+                                                             name="last_name" required="required"/>
+                    </fieldset>
+
+                    <fieldset class="form-group">
+                        <label>User Email</label> <input type="text"
+                                                         class="form-control"
+                                                         th:value='${user.getEmail()}'
+                                                         name="email" required="required">
+                    </fieldset>
+
+                    <fieldset class="form-group">
+                        <label>User Login</label> <input type="text"
+                                                         class="form-control"
+                                                         th:value='${user.getLogin()}'
+                                                         name="login" required="required">
+                    </fieldset>
+
+                    <fieldset class="form-group">
+                        <label>User Password</label> <input type="text"
+                                                            class="form-control"
+                                                            th:value='${user.getPassword()}'
+                                                            name="password" required="required">
+                    </fieldset>
+
+                    <fieldset class="form-group">
+                        <label>User Role</label> <input type="text"
+                                                            class="form-control"
+                                                            th:value='USER'
+                                                            name="role" required="required">
+                    </fieldset>
+
+                    <fieldset class="form-group" th:if="${user.getRoles()} != null">
+                        <label>Current User Roles:</label>
+                        <ul>
+                            <th:block th:each="role : ${user.getRoles()}">
+                                <li th:text="${role.getRole()} ">..</li>
+                            </th:block>
+                        </ul>
+                    </fieldset>
+
+<!--                    <form th:action="@{/users}" th:object="${user}" method="post" >-->
+<!--                        <ul th:if="${user.getRoles()} != null">-->
+<!--                            <li th:each="role : ${user.getRoles()}">-->
+<!--                                <label>-->
+<!--                                    <input type="checkbox" th:field="*{roles}" th:value="${role}"/>-->
+<!--                                </label>-->
+<!--                                <label th:for="${#ids.prev('roles')}" th:text="${role.getRole()}">NO ROLE</label>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--&lt;!&ndash;                        <input type="submit" value="Submit"/>&ndash;&gt;-->
+<!--                        <ul th:if="${user.getRoles()} == null">-->
+<!--                            <li >-->
+<!--                                <label>-->
+<!--                                    <input type="checkbox" th:field="*{roles}" th:value='USER'/>-->
+<!--                                </label>-->
+<!--                                <label th:for="${#ids.prev('roles')}" th:text="USER">NEW ROLE</label>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </form>-->
+
+
+
+                    <p>
+                        <button type="reset">Очистить форму</button>
+                        <button type="submit">Отправить форму</button>
+                        <button class="button" onclick="location.href='/users'">Вернуться к списку</button>
+                    </p>
+
+                </form>
+            </div>
         </div>
-    </div>
     </sec:authorize>
 </div>
+
+
+<!--<form th:action="@{/user}" th:object="${user}" method="post">-->
+
+<!--    <ul>-->
+<!--        <li th:each="role : ${user.getRoles()}">-->
+<!--            <label>-->
+<!--                <input type="checkbox" th:field="*{roles}" th:value="${role}"/>-->
+<!--            </label>-->
+<!--            <label th:for="${#ids.prev('roles')}" th:text="${role}">ADMIN</label>-->
+<!--        </li>-->
+<!--    </ul>-->
+
+
+<!--&lt;!&ndash;    <div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <label th:for="${#ids.next('first')}">First:</label>&ndash;&gt;-->
+<!--&lt;!&ndash;        <input type="checkbox" th:field="*{first}" />&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;    <div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <label th:for="${#ids.next('second')}">Second:</label>&ndash;&gt;-->
+<!--&lt;!&ndash;        <input type="checkbox" th:field="*{second}"/>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+<!--    <input type="submit" value="Submit"/>-->
+<!--</form>-->
 
 </body>
 </html>

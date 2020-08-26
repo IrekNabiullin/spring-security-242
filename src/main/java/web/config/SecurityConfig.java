@@ -93,11 +93,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").anonymous()
                 // защищенные URL
                 .antMatchers("/profile").authenticated()
-                .antMatchers("/admin**").hasAuthority("ROLE_ADMIN")
-                .antMatchers("/users**").hasAuthority("ROLE_ADMIN")
+//                .antMatchers("/admin**").hasAuthority("ROLE_ADMIN")
+//                .antMatchers("/users**").hasAuthority("ROLE_ADMIN")
 
 
-//                .antMatchers("/profile").access("hasAnyRole('ADMIN', 'USER')")
+                .antMatchers("/profile").access("hasAnyRole('ADMIN', 'USER')")
                 .antMatchers("/admin**")
                 .access("hasRole('ADMIN')")
                 .antMatchers("/users/**")

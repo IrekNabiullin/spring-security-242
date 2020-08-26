@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-<html lang="en">
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Admin</title>
@@ -9,22 +10,22 @@
 </head>
 <body>
 <div>
-    <h2 th:align="center" inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h2>
+    <h2 th:align="center" th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h2>
 </div>
 
 
 <form th:align="center" th:action="@{/profile}" method="get">
-    <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
+    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
     <input type="submit" value="My profile"/>
 </form>
 <br>
 <form th:align="center" th:action="@{/users}" method="get">
-    <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
+    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
     <input type="submit" value="Users"/>
 </form>
 <br>
 <form th:align="center" th:action="@{/logout}" method="post">
-    <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
+    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
     <input type="submit" value="Sign Out"/>
 </form>
 <br>

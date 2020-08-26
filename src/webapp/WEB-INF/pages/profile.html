@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
-      lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" x-placement="" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      lang="en" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5 ">
 
 <head>
     <meta charset="UTF-8">
@@ -31,6 +32,15 @@
     </div>
 </div>
 
+<!--<div sec:authorize="isAuthenticated()">-->
+<!--    This content is only shown to authenticated users.-->
+<!--</div>-->
+<!--<div sec:authorize="hasRole('ROLE_ADMIN')">-->
+<!--    This content is only shown to administrators.-->
+<!--</div>-->
+<!--<div sec:authorize="hasRole('ROLE_USER')">-->
+<!--    This content is only shown to users.-->
+<!--</div>-->
 
 </body>
 </html>
